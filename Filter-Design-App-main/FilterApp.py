@@ -515,55 +515,231 @@ class FilterDesignApp(QMainWindow):
         self.z_plane_canvas.draw()
         self.update_frequency_response()
         
+    # def update_frequency_response(self):
+    #     """Update frequency response including all-pass effects"""
+    #     # Calculate frequency points
+    #     w = np.linspace(0, np.pi, 2000)
+    #     z = np.exp(1j * w)
+        
+    #     # Main filter transfer function
+    #     H = np.ones_like(z, dtype=complex)
+    #     for zero in self.zeros:
+    #         H *= (z - zero)
+    #     for pole in self.poles:
+    #         H /= (z - pole)
+        
+    #     # Apply all-pass filters
+    #     if hasattr(self, 'all_pass_enabled') and self.all_pass_enabled.isChecked():
+    #         for i in range(self.all_pass_list.count()):
+    #             item = self.all_pass_list.item(i)
+    #             if item.checkState() == Qt.Checked:
+    #                 filter = self.all_pass_library.get_filter(i)
+    #                 if filter:
+    #                     # Calculate all-pass transfer function properly
+    #                     num = z - filter.zero  # Numerator
+    #                     den = 1 - filter.pole * z  # Denominator
+    #                     H_ap = num / den
+    #                     H *= H_ap  # Apply to main transfer function
+        
+    #     # Calculate magnitude and phase responses
+    #     mag_db = 20 * np.log10(np.abs(H))
+    #     phase_deg = np.unwrap(np.angle(H)) * 180 / np.pi  # Convert to degrees
+        
+    #     # Clear previous plots
+    #     self.mag_ax.clear()
+    #     self.phase_ax.clear()
+        
+    #     # Plot magnitude response
+    #     self.mag_ax.plot(w/np.pi, mag_db, 'w-', linewidth=2)
+    #     self.mag_ax.set_ylabel('Magnitude (dB)', color="WHITE")
+    #     self.mag_ax.set_title('Magnitude Response', color="WHITE")
+    #     self.mag_ax.grid(True)
+        
+    #     # Plot phase response
+    #     self.phase_ax.plot(w/np.pi, phase_deg, 'w-', linewidth=2)
+    #     self.phase_ax.set_xlabel('Normalized Frequency (×π rad/sample)', color="WHITE")
+    #     self.phase_ax.set_ylabel('Phase (degrees)', color="WHITE")
+    #     self.phase_ax.set_title('Phase Response', color="WHITE")
+    #     self.phase_ax.grid(True)
+        
+    #     # Update plots
+    #     self.freq_figure.tight_layout()
+    #     self.freq_canvas.draw()
+    # def update_frequency_response(self):
+    #     """Ensure all-pass filters only affect phase response, not magnitude."""
+    #     w = np.linspace(0, np.pi, 2000)
+    #     z = np.exp(1j * w)
+
+    #     H = np.ones_like(z, dtype=complex)
+    #     for zero in self.zeros:
+    #         H *= (z - zero)
+    #     for pole in self.poles:
+    #         H /= (z - pole)
+
+    #     if self.all_pass_enabled.isChecked():
+    #         for i in range(self.all_pass_list.count()):
+    #             item = self.all_pass_list.item(i)
+    #             if item.checkState() == Qt.Checked:
+    #                 filter = self.all_pass_library.get_filter(i)
+    #                 if filter:
+    #                     num = z - filter.zero
+    #                     den = 1 - filter.pole * z
+    #                     H_ap = num / den
+    #                     H *= H_ap  # Only phase should change
+
+    #     mag_db = 20 * np.log10(np.abs(H))  # Should remain unchanged
+    #     phase_deg = np.unwrap(np.angle(H)) * 180 / np.pi  # Only this should change
+
+    #     self.mag_ax.clear()
+    #     self.phase_ax.clear()
+
+    #     self.mag_ax.plot(w / np.pi, mag_db, 'w-', linewidth=2)
+    #     self.phase_ax.plot(w / np.pi, phase_deg, 'w-', linewidth=2)
+
+    #     self.mag_ax.set_ylabel('Magnitude (dB)')
+    #     self.phase_ax.set_ylabel('Phase (degrees)')
+
+    #     self.freq_canvas.draw()
+    # def update_frequency_response(self):
+    #     """Ensure all-pass filters only affect phase response, not magnitude."""
+    #     w = np.linspace(0, np.pi, 2000)
+    #     z = np.exp(1j * w)
+
+    #     # Main filter transfer function
+    #     H = np.ones_like(z, dtype=complex)
+    #     for zero in self.zeros:
+    #         H *= (z - zero)
+    #     for pole in self.poles:
+    #         H /= (z - pole)
+
+    #     # Apply all-pass filters (only phase should change)
+    #     if self.all_pass_enabled.isChecked():
+    #         for i in range(self.all_pass_list.count()):
+    #             item = self.all_pass_list.item(i)
+    #             if item.checkState() == Qt.Checked:
+    #                 filter = self.all_pass_library.get_filter(i)
+    #                 if filter:
+    #                     num = z - filter.zero
+    #                     den = 1 - filter.pole * z
+    #                     H_ap = num / den
+    #                     H *= H_ap  # Apply to main transfer function
+
+    #     # Magnitude should remain the same
+    #     mag_db = 20 * np.log10(np.abs(H))
+
+    #     # Phase response should change
+    #     phase_deg = np.unwrap(np.angle(H)) * 180 / np.pi
+
+    #     # Update plots
+    #     self.mag_ax.clear()
+    #     self.phase_ax.clear()
+
+    #     self.mag_ax.plot(w / np.pi, mag_db, 'w-', linewidth=2)
+    #     self.phase_ax.plot(w / np.pi, phase_deg, 'w-', linewidth=2)
+
+    #     self.mag_ax.set_ylabel('Magnitude (dB)')
+    #     self.phase_ax.set_ylabel('Phase (degrees)')
+
+    #     self.freq_canvas.draw()
+    # def update_frequency_response(self):
+    #     """Ensure all-pass filters only affect phase response, not magnitude."""
+    #     w = np.linspace(0, np.pi, 2000)
+    #     z = np.exp(1j * w)
+
+    #     # Main filter transfer function before all-pass
+    #     H = np.ones_like(z, dtype=complex)
+    #     for zero in self.zeros:
+    #         H *= (z - zero)
+    #     for pole in self.poles:
+    #         H /= (z - pole)
+
+    #     # Save initial phase response before applying all-pass filters
+    #     initial_phase_deg = np.unwrap(np.angle(H)) * 180 / np.pi
+
+    #     # Apply all-pass filters (should only modify phase)
+    #     if self.all_pass_enabled.isChecked():
+    #         for i in range(self.all_pass_list.count()):
+    #             item = self.all_pass_list.item(i)
+    #             if item.checkState() == Qt.Checked:
+    #                 filter = self.all_pass_library.get_filter(i)
+    #                 if filter:
+    #                     num = z - filter.zero
+    #                     den = 1 - filter.pole * z
+    #                     H_ap = num / den
+    #                     H *= H_ap  # Apply all-pass filter to main transfer function
+
+    #     # Magnitude should remain unchanged
+    #     mag_db = 20 * np.log10(np.abs(H))
+
+    #     # Phase should now be different
+    #     final_phase_deg = np.unwrap(np.angle(H)) * 180 / np.pi
+
+    #     # Plot results
+    #     self.mag_ax.clear()
+    #     self.phase_ax.clear()
+
+    #     self.mag_ax.plot(w / np.pi, mag_db, 'w-', linewidth=2)
+    #     self.phase_ax.plot(w / np.pi, initial_phase_deg, 'r--', linewidth=1, label="Before All-Pass")
+    #     self.phase_ax.plot(w / np.pi, final_phase_deg, 'w-', linewidth=2, label="After All-Pass")
+
+    #     self.mag_ax.set_ylabel('Magnitude (dB)')
+    #     self.phase_ax.set_ylabel('Phase (degrees)')
+    #     self.phase_ax.legend()
+
+    #     self.freq_canvas.draw()
     def update_frequency_response(self):
-        """Update frequency response including all-pass effects"""
-        # Calculate frequency points
+        """Ensure all-pass filters only affect phase response, not magnitude."""
         w = np.linspace(0, np.pi, 2000)
         z = np.exp(1j * w)
-        
-        # Main filter transfer function
+
+        # Main filter transfer function before all-pass
         H = np.ones_like(z, dtype=complex)
         for zero in self.zeros:
             H *= (z - zero)
         for pole in self.poles:
             H /= (z - pole)
-        
-        # Apply all-pass filters
-        if hasattr(self, 'all_pass_enabled') and self.all_pass_enabled.isChecked():
+
+        # Save initial phase response before applying all-pass filters
+        initial_phase_deg = np.unwrap(np.angle(H)) * 180 / np.pi
+
+        # Apply all-pass filters (should only modify phase)
+        applied_filters = False  # Track if any all-pass filter is applied
+        if self.all_pass_enabled.isChecked():
             for i in range(self.all_pass_list.count()):
                 item = self.all_pass_list.item(i)
                 if item.checkState() == Qt.Checked:
                     filter = self.all_pass_library.get_filter(i)
                     if filter:
-                        # Calculate all-pass transfer function properly
-                        num = z - filter.zero  # Numerator
-                        den = 1 - filter.pole * z  # Denominator
+                        num = z - filter.zero
+                        den = 1 - filter.pole * z
                         H_ap = num / den
-                        H *= H_ap  # Apply to main transfer function
-        
-        # Calculate magnitude and phase responses
+                        H *= H_ap  # Apply all-pass filter to main transfer function
+                        applied_filters = True
+
+        # Magnitude should remain unchanged
         mag_db = 20 * np.log10(np.abs(H))
-        phase_deg = np.unwrap(np.angle(H)) * 180 / np.pi  # Convert to degrees
-        
-        # Clear previous plots
+
+        # Phase should now be different
+        final_phase_deg = np.unwrap(np.angle(H)) * 180 / np.pi
+
+        # Plot results
         self.mag_ax.clear()
         self.phase_ax.clear()
+
+        self.mag_ax.plot(w / np.pi, mag_db, 'w-', linewidth=2)
+
+        # Ensure at least one label exists to prevent warning
+        self.phase_ax.plot(w / np.pi, initial_phase_deg, 'r--', linewidth=1, label="Before All-Pass")
+        if applied_filters:
+            self.phase_ax.plot(w / np.pi, final_phase_deg, 'w-', linewidth=2, label="After All-Pass")
         
-        # Plot magnitude response
-        self.mag_ax.plot(w/np.pi, mag_db, 'w-', linewidth=2)
-        self.mag_ax.set_ylabel('Magnitude (dB)', color="WHITE")
-        self.mag_ax.set_title('Magnitude Response', color="WHITE")
-        self.mag_ax.grid(True)
-        
-        # Plot phase response
-        self.phase_ax.plot(w/np.pi, phase_deg, 'w-', linewidth=2)
-        self.phase_ax.set_xlabel('Normalized Frequency (×π rad/sample)', color="WHITE")
-        self.phase_ax.set_ylabel('Phase (degrees)', color="WHITE")
-        self.phase_ax.set_title('Phase Response', color="WHITE")
-        self.phase_ax.grid(True)
-        
-        # Update plots
-        self.freq_figure.tight_layout()
+        self.mag_ax.set_ylabel('Magnitude (dB)')
+        self.phase_ax.set_ylabel('Phase (degrees)')
+
+        # Only show legend if filters were applied
+        if applied_filters:
+            self.phase_ax.legend()
+
         self.freq_canvas.draw()
 
     def setup_toolbar(self):
@@ -1150,21 +1326,74 @@ class FilterDesignApp(QMainWindow):
         
     #     except Exception as e:
     #         print(f"Error processing sample: {e}")
+    # def process_next_sample(self):
+    #     """Process the next sample or chunk of samples and update the plots."""
+    #     try:
+    #         # Process the loaded signal (if any)
+    #         if hasattr(self, 'loaded_signal') and self.loaded_signal:
+    #             # Get the next sample from the loaded signal
+    #             x = self.loaded_signal.popleft()
+    #             self.input_signal.append(x)  # Add to the input buffer
+    #         else:
+    #             # If no loaded signal, use the mouse-generated signal
+    #             if not self.input_signal:
+    #                 return
+    #             x = self.input_signal[-1]  # Use the latest mouse-generated sample
+
+    #         # Apply the filter to the sample
+    #         y = self.apply_selected_filter(x)
+
+    #         # Append the filtered sample to the output buffer
+    #         self.output_signal.append(y)
+
+    #         # Update the plots with the new data
+    #         self.update_signal_plots()
+
+    #     except Exception as e:
+    #         print(f"Error processing sample: {e}")
+    # def process_next_sample(self):
+    #     """Process the next sample or chunk of samples and update the plots in sync."""
+    #     try:
+    #         if not self.input_signal:
+    #             return
+
+    #         x = self.input_signal[-1]  # Latest sample
+
+    #         # Apply filter
+    #         y = self.apply_selected_filter(x)
+
+    #         # Ensure output signal updates at the same rate as input
+    #         self.output_signal.append(y)
+
+    #         # Keep buffers synchronized
+    #         while len(self.output_signal) < len(self.input_signal):
+    #             self.output_signal.append(y)
+    #         while len(self.input_signal) < len(self.output_signal):
+    #             self.input_signal.append(x)
+
+    #         self.update_signal_plots()  # Update both input and output plots
+
+    #     except Exception as e:
+    #         print(f"Error processing sample: {e}")
     def process_next_sample(self):
         """Process the next sample or chunk of samples and update the plots."""
-        if not self.input_signal:
-            return
-
         try:
-            # Get the next chunk of samples (e.g., 100 samples at a time)
-            chunk_size = 100
-            input_chunk = [self.input_signal.popleft() for _ in range(min(chunk_size, len(self.input_signal)))]
+            # Process the loaded signal (if any)
+            if hasattr(self, 'loaded_signal') and self.loaded_signal:
+                # Get the next sample from the loaded signal
+                x = self.loaded_signal.popleft()
+                self.input_signal.append(x)  # Add to the input buffer
+            else:
+                # If no loaded signal, use the mouse-generated signal
+                if not self.input_signal:
+                    return
+                x = self.input_signal[-1]  # Use the latest mouse-generated sample
 
-            # Apply the filter to the chunk
-            filtered_chunk = self.apply_selected_filter(np.array(input_chunk))
+            # Apply the filter to the sample
+            y = self.apply_selected_filter(x)
 
-            # Append the filtered chunk to the output buffer
-            self.output_signal.extend(filtered_chunk.tolist())
+            # Append the filtered sample to the output buffer
+            self.output_signal.append(y)
 
             # Update the plots with the new data
             self.update_signal_plots()
@@ -1173,25 +1402,61 @@ class FilterDesignApp(QMainWindow):
             print(f"Error processing sample: {e}")
 
 
+    # def on_mouse_draw(self, event):
+    #     """Handle mouse movement in drawing area to generate input signal"""
+    #     if not hasattr(self, 'last_y'):
+    #         self.last_y = event.y()
+    #         return
+                
+    #     # Calculate vertical displacement for frequency
+    #     dy = event.y() - self.last_y
+        
+    #     # Convert mouse movement to signal value (-1 to 1 range)
+    #     y = (self.draw_area.height() - event.y()) / self.draw_area.height() * 2 - 1
+        
+    #     # Add to input buffer with rate limiting
+    #     if len(self.input_signal) < 10000:  # Maintain max buffer size
+    #         self.input_signal.append(y)
+    #     else:
+    #         self.input_signal = self.input_signal[1:] + [y]
+        
+    #     self.last_y = event.y()
+    # def on_mouse_draw(self, event):
+    #     """Handle mouse movement in drawing area to generate input signal."""
+    #     if not hasattr(self, 'last_y'):
+    #         self.last_y = event.y()
+    #         return
+
+    #     y = (self.draw_area.height() - event.y()) / self.draw_area.height() * 2 - 1
+
+    #     # Update input signal buffer
+    #     if len(self.input_signal) < 10000:
+    #         self.input_signal.append(y)
+    #     else:
+    #         self.input_signal = self.input_signal[1:] + [y]
+
+    #     self.last_y = event.y()
+
+    #     # Process new sample & update both plots in real time
+    #     self.process_next_sample()
+    #     self.update_signal_plots()
     def on_mouse_draw(self, event):
-        """Handle mouse movement in drawing area to generate input signal"""
+        """Handle mouse movement to generate input signal."""
         if not hasattr(self, 'last_y'):
             self.last_y = event.y()
             return
-                
-        # Calculate vertical displacement for frequency
-        dy = event.y() - self.last_y
         
-        # Convert mouse movement to signal value (-1 to 1 range)
         y = (self.draw_area.height() - event.y()) / self.draw_area.height() * 2 - 1
         
-        # Add to input buffer with rate limiting
-        if len(self.input_signal) < 10000:  # Maintain max buffer size
+        if len(self.input_signal) < 10000:
             self.input_signal.append(y)
         else:
             self.input_signal = self.input_signal[1:] + [y]
         
         self.last_y = event.y()
+        self.process_next_sample()  # Ensure the output signal updates
+        self.update_signal_plots()  # Redraw plots immediately
+
         
     def process_signal(self):
         # Implement actual filter processing using difference equation
@@ -1229,30 +1494,75 @@ class FilterDesignApp(QMainWindow):
     #         print(f"Error applying filter: {e}")
     #         return x
 
+    # def apply_selected_filter(self, x):
+    #     """Apply the designed filter and ensure real output."""
+    #     try:
+    #         if len(self.zeros) == 0 and len(self.poles) == 0:
+    #             return x  # No filter applied
+
+    #         if self.direct_form.isChecked():
+    #             coeffs = self.generate_direct_form_II()
+    #             b = np.array(coeffs['b'], dtype=float)
+    #             a = np.array(coeffs['a'], dtype=float)
+    #         else:
+    #             coeffs = self.generate_cascade_form()
+    #             b = np.array(coeffs[0][:3], dtype=float)
+    #             a = np.array(coeffs[0][3:], dtype=float)
+
+    #         # Apply the filter using scipy.signal.lfilter
+    #         y = scipy.signal.lfilter(b, a, [x])
+
+    #         return float(np.real(y[0]))  # Ensure output is real
+
+    #     except Exception as e:
+    #         print(f"Error applying filter: {e}")
+    #         return x
+    # def apply_selected_filter(self, x):
+    #     """Apply the designed filter and ensure real output."""
+    #     try:
+    #         if len(self.zeros) == 0 and len(self.poles) == 0:
+    #             return x  # No filter applied
+
+    #         if self.direct_form.isChecked():
+    #             coeffs = self.generate_direct_form_II()
+    #             b = np.array(coeffs['b'], dtype=float)
+    #             a = np.array(coeffs['a'], dtype=float)
+    #         else:
+    #             coeffs = self.generate_cascade_form()
+    #             b = np.array(coeffs[0][:3], dtype=float)
+    #             a = np.array(coeffs[0][3:], dtype=float)
+
+    #         # Apply the filter using scipy.signal.lfilter
+    #         y = scipy.signal.lfilter(b, a, [x])
+
+    #         return np.real(y).item()  # Ensure scalar real output
+
+    #     except Exception as e:
+    #         print(f"Error applying filter: {e}")
+    #         return x
     def apply_selected_filter(self, x):
-        """Apply the designed filter to the input signal (can be a single sample or a chunk)."""
+        """Apply the designed filter and ensure real output."""
         try:
             if len(self.zeros) == 0 and len(self.poles) == 0:
-                return x  # No filter applied
+                return float(x)  # No filter applied
 
-            # Get the filter coefficients
             if self.direct_form.isChecked():
                 coeffs = self.generate_direct_form_II()
                 b = np.array(coeffs['b'], dtype=float)
                 a = np.array(coeffs['a'], dtype=float)
             else:
                 coeffs = self.generate_cascade_form()
-                b = np.array(coeffs[0][:3], dtype=float)  # Numerator coefficients
-                a = np.array(coeffs[0][3:], dtype=float)  # Denominator coefficients
+                b = np.array(coeffs[0][:3], dtype=float)
+                a = np.array(coeffs[0][3:], dtype=float)
 
             # Apply the filter using scipy.signal.lfilter
-            y = scipy.signal.lfilter(b, a, x)
+            y = scipy.signal.lfilter(b, a, [float(x)])  # Ensure input is float
 
-            return y
+            return float(np.real(y[0]))  # Convert output to real scalar float
 
         except Exception as e:
             print(f"Error applying filter: {e}")
-            return x
+            return float(x)
 
     def apply_direct_form(self, x, coeffs):
         try:
@@ -1331,8 +1641,23 @@ class FilterDesignApp(QMainWindow):
             
         return y
 
+    # def apply_all_pass_filters(self, x):
+    #     """Process input through all enabled all-pass filters"""
+    #     y = x
+    #     try:
+    #         if self.all_pass_enabled.isChecked():
+    #             for i in range(self.all_pass_list.count()):
+    #                 item = self.all_pass_list.item(i)
+    #                 if item.checkState() == Qt.Checked:
+    #                     filter = self.all_pass_library.get_filter(i)
+    #                     if filter:
+    #                         y = filter.process(y)
+    #     except Exception as e:
+    #         print(f"Error in all-pass filtering: {e}")
+            
+    #     return y
     def apply_all_pass_filters(self, x):
-        """Process input through all enabled all-pass filters"""
+        """Process input through all enabled all-pass filters."""
         y = x
         try:
             if self.all_pass_enabled.isChecked():
@@ -1344,7 +1669,7 @@ class FilterDesignApp(QMainWindow):
                             y = filter.process(y)
         except Exception as e:
             print(f"Error in all-pass filtering: {e}")
-            
+
         return y
             
     # def update_signal_plots(self):
@@ -1372,6 +1697,24 @@ class FilterDesignApp(QMainWindow):
     #     t = np.arange(min_len) * dt
         
     #     # Update plots
+    #     self.input_curve.setData(t, input_data)
+    #     self.output_curve.setData(t, output_data)
+    # def update_signal_plots(self):
+    #     """Update the input and output signal plots with the most recent data."""
+    #     if not self.input_signal or not self.output_signal:
+    #         return
+
+    #     # Get the window size (number of samples to display)
+    #     window_size = 1000  # Adjust this value as needed
+
+    #     # Get the most recent samples
+    #     input_data = np.array(list(self.input_signal)[-window_size:])
+    #     output_data = np.array(list(self.output_signal)[-window_size:])
+
+    #     # Create a time axis
+    #     t = np.arange(len(input_data)) / self.processing_speed
+
+    #     # Update the plots
     #     self.input_curve.setData(t, input_data)
     #     self.output_curve.setData(t, output_data)
     def update_signal_plots(self):
@@ -1897,6 +2240,33 @@ class FilterDesignApp(QMainWindow):
         panel.setLayout(layout)
         return panel
     
+    # def load_signal(self):
+    #     """Load a signal from a file and prepare it for real-time processing."""
+    #     options = QFileDialog.Options()
+    #     file_path, _ = QFileDialog.getOpenFileName(self, "Open Signal File", "", "CSV Files (*.csv);;All Files (*)", options=options)
+
+    #     if file_path:
+    #         try:
+    #             # Load the signal from the file
+    #             data = np.genfromtxt(file_path, delimiter=',', skip_header=1)  # Skip the first row (header)
+
+    #             if data.ndim == 1:  # Ensure it's a valid 1D signal
+    #                 self.loaded_signal = deque(data.tolist(), maxlen=self.max_samples)  # Load into a separate buffer
+    #             elif data.shape[1] >= 2:  # If CSV has two columns (Time, Signal), extract the second column
+    #                 self.loaded_signal = deque(data[:, 1].tolist(), maxlen=self.max_samples)
+    #             else:
+    #                 QMessageBox.warning(self, "Error", "Invalid signal format. Expected numeric data.")
+    #                 return
+
+    #             # Reset the input and output signal buffers
+    #             self.input_signal.clear()
+    #             self.output_signal.clear()
+
+    #             # Start the real-time processing timer
+    #             self.process_timer.start()
+
+    #         except Exception as e:
+    #             QMessageBox.critical(self, "Error", f"Failed to load signal: {str(e)}")
     def load_signal(self):
         """Load a signal from a file and prepare it for real-time processing."""
         options = QFileDialog.Options()
@@ -1908,14 +2278,15 @@ class FilterDesignApp(QMainWindow):
                 data = np.genfromtxt(file_path, delimiter=',', skip_header=1)  # Skip the first row (header)
 
                 if data.ndim == 1:  # Ensure it's a valid 1D signal
-                    self.input_signal = deque(data.tolist(), maxlen=self.max_samples)  # Load into input buffer
+                    self.loaded_signal = deque(data.tolist(), maxlen=self.max_samples)  # Load into a separate buffer
                 elif data.shape[1] >= 2:  # If CSV has two columns (Time, Signal), extract the second column
-                    self.input_signal = deque(data[:, 1].tolist(), maxlen=self.max_samples)
+                    self.loaded_signal = deque(data[:, 1].tolist(), maxlen=self.max_samples)
                 else:
                     QMessageBox.warning(self, "Error", "Invalid signal format. Expected numeric data.")
                     return
 
-                # Reset the output signal buffer
+                # Reset the input and output signal buffers
+                self.input_signal.clear()
                 self.output_signal.clear()
 
                 # Start the real-time processing timer
@@ -2057,47 +2428,152 @@ class FilterDesignApp(QMainWindow):
                 return True
         return super().eventFilter(obj, event)
 
+    # def update_processing_speed(self, value):
+    #     """Update processing speed and display"""
+    #     self.processing_speed = value
+    #     self.speed_label.setText(f"{value} pts/sec")
+        
+    #     # Update timer interval (ms)
+    #     interval = int(1000 / value)
+    #     self.process_timer.setInterval(interval)
+        
+    #     # Clear old data
+    #     self.reset_signal_buffers()
     def update_processing_speed(self, value):
-        """Update processing speed and display"""
+        """Adjust real-time processing speed dynamically."""
         self.processing_speed = value
-        self.speed_label.setText(f"{value} pts/sec")
-        
-        # Update timer interval (ms)
-        interval = int(1000 / value)
+        interval = max(1, int(1000 / value))  # Minimum 1ms update interval
         self.process_timer.setInterval(interval)
-        
-        # Clear old data
-        self.reset_signal_buffers()
 
+        # Trim buffers to avoid excessive data accumulation
+        buffer_size = value * 10
+        if len(self.input_signal) > buffer_size:
+            self.input_signal = deque(list(self.input_signal)[-buffer_size:], maxlen=buffer_size)
+        if len(self.output_signal) > buffer_size:
+            self.output_signal = deque(list(self.output_signal)[-buffer_size:], maxlen=buffer_size)
+
+        self.speed_label.setText(f"{value} pts/sec")
+    
+    def reset_signal_buffers(self):
+        """Clear the input and output signal buffers."""
+        self.input_signal.clear()
+        self.output_signal.clear()
+        if hasattr(self, 'loaded_signal'):
+            self.loaded_signal.clear()
+
+    # def handle_mouse_draw(self, event):
+    #     """Generate input signal from mouse movement"""
+    #     if not hasattr(self, 'last_pos'):
+    #         self.last_pos = event.pos()
+    #         self.last_time = time.time()
+    #         return
+            
+    #     # Calculate mouse velocity 
+    #     dt = time.time() - self.last_time
+    #     dx = event.pos().x() - self.last_pos.x()
+    #     dy = event.pos().y() - self.last_pos.y()
+    #     velocity = np.sqrt(dx*dx + dy*dy) / dt
+        
+    #     # Generate signal based on y position
+    #     y = 1.0 - (2.0 * event.pos().y() / self.draw_area.height())
+        
+    #     # Add frequency component based on velocity
+    #     if velocity > 0:
+    #         freq = min(20, velocity / 100)  # Cap max frequency
+    #         y *= np.sin(2 * np.pi * freq * dt)
+        
+    #     self.input_signal.append(float(y))
+        
+    #     # Update state
+    #     self.last_pos = event.pos()
+    #     self.last_time = time.time()
+        
+    #     self.process_next_sample()
+    # def handle_mouse_draw(self, event):
+    #     """Generate input signal from mouse movement."""
+    #     if not hasattr(self, 'last_pos'):
+    #         self.last_pos = event.pos()
+    #         self.last_time = time.time()
+    #         return
+
+    #     # Calculate mouse velocity
+    #     dt = time.time() - self.last_time
+    #     dx = event.pos().x() - self.last_pos.x()
+    #     dy = event.pos().y() - self.last_pos.y()
+    #     velocity = np.sqrt(dx * dx + dy * dy) / dt
+
+    #     # Generate signal based on y position
+    #     y = 1.0 - (2.0 * event.pos().y() / self.draw_area.height())
+
+    #     # Add frequency component based on velocity
+    #     if velocity > 0:
+    #         freq = min(20, velocity / 100)  # Cap max frequency
+    #         y *= np.sin(2 * np.pi * freq * dt)
+
+    #     # Add the sample to the input buffer
+    #     self.input_signal.append(float(y))
+
+    #     # Update state
+    #     self.last_pos = event.pos()
+    #     self.last_time = time.time()
+    # def handle_mouse_draw(self, event):
+    #     """Generate input signal from mouse movement."""
+    #     if not hasattr(self, 'last_pos'):
+    #         self.last_pos = event.pos()
+    #         self.last_time = time.time()
+    #         return
+
+    #     # Calculate mouse velocity
+    #     dt = time.time() - self.last_time
+    #     dx = event.pos().x() - self.last_pos.x()
+    #     dy = event.pos().y() - self.last_pos.y()
+    #     velocity = np.sqrt(dx * dx + dy * dy) / dt
+
+    #     # Generate signal based on y position
+    #     y = 1.0 - (2.0 * event.pos().y() / self.draw_area.height())
+
+    #     # Add frequency component based on velocity
+    #     if velocity > 0:
+    #         freq = min(20, velocity / 100)  # Cap max frequency
+    #         y *= np.sin(2 * np.pi * freq * dt)
+
+    #     # Add the sample to the input buffer
+    #     self.input_signal.append(float(y))
+
+    #     # Process the new sample
+    #     self.process_next_sample()
+
+    #     # Update state
+    #     self.last_pos = event.pos()
+    #     self.last_time = time.time()
     def handle_mouse_draw(self, event):
-        """Generate input signal from mouse movement"""
+        """Generate input signal from mouse movement."""
         if not hasattr(self, 'last_pos'):
             self.last_pos = event.pos()
             self.last_time = time.time()
             return
-            
-        # Calculate mouse velocity 
+
+        # Calculate mouse velocity
         dt = time.time() - self.last_time
         dx = event.pos().x() - self.last_pos.x()
         dy = event.pos().y() - self.last_pos.y()
-        velocity = np.sqrt(dx*dx + dy*dy) / dt
-        
+        velocity = np.sqrt(dx * dx + dy * dy) / dt
+
         # Generate signal based on y position
         y = 1.0 - (2.0 * event.pos().y() / self.draw_area.height())
-        
+
         # Add frequency component based on velocity
         if velocity > 0:
             freq = min(20, velocity / 100)  # Cap max frequency
             y *= np.sin(2 * np.pi * freq * dt)
-        
+
+        # Add the sample to the input buffer
         self.input_signal.append(float(y))
-        
+
         # Update state
         self.last_pos = event.pos()
         self.last_time = time.time()
         
-        self.process_next_sample()
-    
     def process_all_pass(self, x):
         """Apply enabled all-pass filters to input sample"""
         y = x
